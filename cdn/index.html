@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yuan Plugin Components CDN</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+        }
+        .cdn-links {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .cdn-link {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+        }
+        .cdn-link code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+        .version-badge {
+            background: #28a745;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .example {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .example pre {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Yuan Plugin Components</h1>
+        <p>浏览器插件通用组件库 CDN 服务</p>
+        <span class="version-badge">v1.0.0</span>
+    </div>
+
+    <div class="cdn-links">
+        <h2>📦 CDN 链接</h2>
+        
+        <div class="cdn-link">
+            <h3>完整版本 (推荐)</h3>
+            <code>https://cdn.jsdelivr.net/gh/Denny-Yuan/yuan-plugin-components@latest/dist/yuan-components.js</code>
+            <p>包含所有组件和功能，适合大多数使用场景</p>
+        </div>
+
+        <div class="cdn-link">
+            <h3>压缩版本</h3>
+            <code>https://cdn.jsdelivr.net/gh/Denny-Yuan/yuan-plugin-components@latest/dist/yuan-components.min.js</code>
+            <p>压缩后的版本，文件更小，加载更快</p>
+        </div>
+
+        <div class="cdn-link">
+            <h3>单独组件</h3>
+            <code>https://cdn.jsdelivr.net/gh/Denny-Yuan/yuan-plugin-components@latest/dist/components/shortcuts.js</code>
+            <p>只需要特定组件时使用</p>
+        </div>
+    </div>
+
+    <div class="example">
+        <h2>🚀 快速开始</h2>
+        
+        <h3>1. 引入组件库</h3>
+        <pre><code>&lt;script src="https://cdn.jsdelivr.net/gh/Denny-Yuan/yuan-plugin-components@latest/dist/yuan-components.min.js"&gt;&lt;/script&gt;</code></pre>
+
+        <h3>2. 使用组件</h3>
+        <pre><code>// 创建快捷键组件
+const shortcuts = YuanComponents.Shortcuts.create({
+    shortcuts: [
+        {
+            title: '基本操作',
+            items: [
+                { key: 'Ctrl+F', description: '搜索' },
+                { key: 'Ctrl+S', description: '保存' }
+            ]
+        }
+    ],
+    container: '#shortcuts-container'
+});
+
+// 显示通知
+YuanComponents.Toast.success('操作成功！');</code></pre>
+
+        <h3>3. 在插件中使用</h3>
+        <pre><code>// manifest.json
+{
+    "content_scripts": [{
+        "matches": ["&lt;all_urls&gt;"],
+        "js": [
+            "https://cdn.jsdelivr.net/gh/Denny-Yuan/yuan-plugin-components@latest/dist/yuan-components.min.js",
+            "your-plugin-script.js"
+        ]
+    }]
+}</code></pre>
+    </div>
+
+    <div class="example">
+        <h2>📚 组件列表</h2>
+        
+        <h3>YuanShortcuts - 快捷键组件</h3>
+        <ul>
+            <li>统一的快捷键面板</li>
+            <li>可自定义的快捷键按钮</li>
+            <li>支持分组显示</li>
+            <li>响应式设计</li>
+        </ul>
+
+        <h3>YuanToast - 通知组件</h3>
+        <ul>
+            <li>多种类型的通知（成功、错误、警告、信息）</li>
+            <li>自动关闭和手动关闭</li>
+            <li>可自定义位置和样式</li>
+            <li>响应式设计</li>
+        </ul>
+
+        <h3>YuanCore - 核心库</h3>
+        <ul>
+            <li>统一的设计系统</li>
+            <li>工具函数集合</li>
+            <li>组件注册和管理</li>
+            <li>主题和配置系统</li>
+        </ul>
+    </div>
+
+    <div class="example">
+        <h2>🔗 相关链接</h2>
+        <ul>
+            <li><a href="https://github.com/Denny-Yuan/yuan-plugin-components">GitHub 仓库</a></li>
+            <li><a href="https://github.com/Denny-Yuan/yuan-plugin-components/blob/main/README.md">使用文档</a></li>
+            <li><a href="https://github.com/Denny-Yuan/yuan-plugin-components/issues">问题反馈</a></li>
+            <li><a href="https://github.com/Denny-Yuan">作者主页</a></li>
+        </ul>
+    </div>
+
+    <footer style="text-align: center; margin-top: 40px; padding: 20px; border-top: 1px solid #dee2e6;">
+        <p>&copy; 2025 Denny Yuan. All rights reserved.</p>
+        <p>Yuan Plugin Components - 让插件开发更简单</p>
+    </footer>
+
+    <script>
+        // 更新版本信息
+        fetch('https://api.github.com/repos/Denny-Yuan/yuan-plugin-components/releases/latest')
+            .then(response => response.json())
+            .then(data => {
+                const versionBadge = document.querySelector('.version-badge');
+                if (versionBadge && data.tag_name) {
+                    versionBadge.textContent = data.tag_name;
+                }
+            })
+            .catch(() => {
+                // 忽略错误，使用默认版本
+            });
+    </script>
+</body>
+</html>
