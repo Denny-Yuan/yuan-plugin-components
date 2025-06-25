@@ -1,0 +1,34 @@
+{
+  "name": "yuan-plugin-components",
+  "version": "1.0.0",
+  "description": "Yuan 浏览器插件通用组件库",
+  "main": "dist/yuan-components.js",
+  "author": "Denny Yuan",
+  "license": "MIT",
+  "homepage": "https://github.com/Denny-Yuan",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Denny-Yuan/yuan-plugin-components.git"
+  },
+  "keywords": [
+    "browser-extension",
+    "chrome-extension",
+    "components",
+    "ui-library",
+    "yuan-plugins"
+  ],
+  "files": [
+    "dist/",
+    "src/",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "node build.js",
+    "dev": "node build.js --watch",
+    "test": "echo \"No tests yet\"",
+    "release": "npm run build && npm version patch"
+  },
+  "devDependencies": {
+    "fs-extra": "^11.0.0"
+  }
+}

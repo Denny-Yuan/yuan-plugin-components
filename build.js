@@ -1,4 +1,5 @@
-const fs = require('fs-extra');
+const fs = require('fs').promises;
+const fsSync = require('fs');
 const path = require('path');
 
 class ComponentBuilder {
@@ -10,23 +11,32 @@ class ComponentBuilder {
 
     async build() {
         console.log('🚀 开始构建 Yuan Components...');
-        
+
         // 清理输出目录
-        await fs.emptyDir(this.distDir);
-        
+        await this.emptyDir(this.distDir);
+
         // 读取所有组件
         await this.loadComponents();
-        
+
         // 构建合并文件
         await this.buildCombined();
-        
+
         // 构建单独文件
         await this.buildSeparate();
-        
+
         // 复制资源文件
         await this.copyAssets();
-        
+
         console.log('✅ 构建完成！');
+    }
+
+    async emptyDir(dir) {
+        try {
+            await fs.rmdir(dir, { recursive: true });
+        } catch (err) {
+            // 目录不存在，忽略错误
+        }
+        await fs.mkdir(dir, { recursive: true });
     }
 
     async loadComponents() {
@@ -83,8 +93,8 @@ class ComponentBuilder {
 
     async buildSeparate() {
         const separateDir = path.join(this.distDir, 'components');
-        await fs.ensureDir(separateDir);
-        
+        await fs.mkdir(separateDir, { recursive: true });
+
         for (const component of this.components) {
             const content = `${this.generateHeader()}\n${component.content}\n${this.generateFooter()}`;
             await fs.writeFile(
@@ -92,23 +102,23 @@ class ComponentBuilder {
                 content
             );
         }
-        
+
         console.log('📁 生成单独组件文件');
     }
 
     async copyAssets() {
         // 复制 package.json
-        const packageJson = await fs.readJson(path.join(__dirname, 'package.json'));
-        await fs.writeJson(path.join(this.distDir, 'package.json'), packageJson, { spaces: 2 });
-        
+        const packageJsonContent = await fs.readFile(path.join(__dirname, 'package.json'), 'utf8');
+        await fs.writeFile(path.join(this.distDir, 'package.json'), packageJsonContent);
+
         // 复制 README
-        if (await fs.pathExists(path.join(__dirname, 'README.md'))) {
-            await fs.copy(
-                path.join(__dirname, 'README.md'),
-                path.join(this.distDir, 'README.md')
-            );
+        try {
+            const readmeContent = await fs.readFile(path.join(__dirname, 'README.md'), 'utf8');
+            await fs.writeFile(path.join(this.distDir, 'README.md'), readmeContent);
+        } catch (err) {
+            // README 不存在，忽略
         }
-        
+
         console.log('📋 复制资源文件');
     }
 
