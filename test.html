@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yuan Components 测试页面</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-section {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        .test-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        .test-button:hover {
+            background: #5a6fd8;
+            transform: translateY(-1px);
+        }
+        #shortcuts-container {
+            margin: 20px 0;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <h1>Yuan Plugin Components 测试页面</h1>
+    
+    <div class="test-section">
+        <h2>📦 CDN 加载测试</h2>
+        <div id="cdn-status" class="status">正在加载组件库...</div>
+    </div>
+
+    <div class="test-section">
+        <h2>⌨️ 快捷键组件测试</h2>
+        <div id="shortcuts-container">
+            <!-- 快捷键按钮将在这里生成 -->
+        </div>
+        <p>快捷键按钮应该出现在上方，点击可查看快捷键面板</p>
+    </div>
+
+    <div class="test-section">
+        <h2>📢 Toast 通知测试</h2>
+        <button class="test-button" onclick="testToast('success')">成功通知</button>
+        <button class="test-button" onclick="testToast('error')">错误通知</button>
+        <button class="test-button" onclick="testToast('warning')">警告通知</button>
+        <button class="test-button" onclick="testToast('info')">信息通知</button>
+    </div>
+
+    <div class="test-section">
+        <h2>🔧 组件信息</h2>
+        <div id="component-info">
+            <p>组件库版本: <span id="version">加载中...</span></p>
+            <p>可用组件: <span id="components">加载中...</span></p>
+        </div>
+    </div>
+
+    <!-- 引入 Yuan Components CDN -->
+    <script src="https://cdn.jsdelivr.net/gh/Denny-Yuan/yuan-plugin-components@latest/dist/yuan-components.min.js"></script>
+    
+    <script>
+        // 等待组件库加载
+        function waitForYuanComponents() {
+            return new Promise((resolve) => {
+                if (window.YuanComponents) {
+                    resolve(window.YuanComponents);
+                    return;
+                }
+                
+                const checkInterval = setInterval(() => {
+                    if (window.YuanComponents) {
+                        clearInterval(checkInterval);
+                        resolve(window.YuanComponents);
+                    }
+                }, 100);
+                
+                // 超时处理
+                setTimeout(() => {
+                    clearInterval(checkInterval);
+                    resolve(null);
+                }, 10000);
+            });
+        }
+
+        // 测试Toast通知
+        function testToast(type) {
+            if (!window.YuanComponents) {
+                alert('组件库未加载');
+                return;
+            }
+            
+            const messages = {
+                success: '操作成功完成！',
+                error: '发生了一个错误！',
+                warning: '请注意这个警告！',
+                info: '这是一条信息提示'
+            };
+            
+            YuanComponents.Toast[type](messages[type]);
+        }
+
+        // 初始化测试
+        async function initTest() {
+            const statusEl = document.getElementById('cdn-status');
+            
+            try {
+                const YuanComponents = await waitForYuanComponents();
+                
+                if (!YuanComponents) {
+                    statusEl.className = 'status error';
+                    statusEl.textContent = '❌ CDN 加载失败或超时';
+                    return;
+                }
+                
+                statusEl.className = 'status success';
+                statusEl.textContent = '✅ CDN 加载成功！';
+                
+                // 更新组件信息
+                document.getElementById('version').textContent = YuanComponents.version || '未知';
+                
+                const availableComponents = [];
+                if (YuanComponents.Shortcuts) availableComponents.push('Shortcuts');
+                if (YuanComponents.Toast) availableComponents.push('Toast');
+                if (YuanComponents.Core) availableComponents.push('Core');
+                
+                document.getElementById('components').textContent = availableComponents.join(', ');
+                
+                // 创建快捷键组件
+                if (YuanComponents.Shortcuts) {
+                    const shortcuts = YuanComponents.Shortcuts.create({
+                        shortcuts: [
+                            {
+                                title: '测试快捷键',
+                                items: [
+                                    { key: 'Ctrl+T', description: '测试功能' },
+                                    { key: 'Ctrl+?', description: '显示帮助' },
+                                    { key: 'Esc', description: '关闭面板' }
+                                ]
+                            },
+                            {
+                                title: '通知测试',
+                                items: [
+                                    { key: 'Ctrl+1', description: '成功通知' },
+                                    { key: 'Ctrl+2', description: '错误通知' },
+                                    { key: 'Ctrl+3', description: '警告通知' },
+                                    { key: 'Ctrl+4', description: '信息通知' }
+                                ]
+                            }
+                        ],
+                        container: '#shortcuts-container',
+                        showButton: true,
+                        buttonText: '查看快捷键',
+                        buttonIcon: '⌨️'
+                    });
+                    
+                    console.log('快捷键组件创建成功:', shortcuts);
+                }
+                
+                // 显示欢迎消息
+                if (YuanComponents.Toast) {
+                    setTimeout(() => {
+                        YuanComponents.Toast.success('Yuan Components 加载成功！');
+                    }, 1000);
+                }
+                
+            } catch (error) {
+                statusEl.className = 'status error';
+                statusEl.textContent = '❌ 初始化失败: ' + error.message;
+                console.error('初始化错误:', error);
+            }
+        }
+
+        // 页面加载完成后初始化
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initTest);
+        } else {
+            initTest();
+        }
+    </script>
+</body>
+</html>
